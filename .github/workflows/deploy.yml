@@ -36,7 +36,7 @@ jobs:
             -backend-config="resource_group_name=fh-smdo" \
             -backend-config="storage_account_name=terraform01manual" \
             -backend-config="container_name=tfstate" \
-            -backend-config="key=terraform-infra.tfstate" \
+            -backend-config="key=terraform-infra.tfstate"
         working-directory: ./terraform
         env: 
           ARM_USE_OIDC: true
@@ -49,6 +49,11 @@ jobs:
           terraform plan -out=tfplan \
             -var="access_token=${{ secrets.ACCESS_TOKEN }}"
         working-directory: ./terraform
+        env: 
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -62,3 +67,8 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
         working-directory: ./terraform
+        env: 
+          ARM_USE_OIDC: true
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
