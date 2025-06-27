@@ -1,0 +1,49 @@
+name: Deploy MQTT Client to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Azure with OIDC
+        uses: azure/login@v1
+        with:
+          client-id: 7c21e53b-0e8a-4cd9-8d45-c5905f358e7e           
+          tenant-id: 08d72bfb-9c6e-4a87-8cb5-e86e9a2c4b86            
+          subscription-id: 7c21e53b-0e8a-4cd9-8d45-c5905f358e7e   
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/ahmaad-dev/my-mqtt-project:mqttclient-v1 ./projectroot
+
+      - name: Push Docker image
+        run: docker push ghcr.io/ahmaad-dev/my-mqtt-project:mqttclient-v1
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve \
+            -var="access_token=${{ secrets.ACCESS_TOKEN }}"
+        working-directory: terraform/
