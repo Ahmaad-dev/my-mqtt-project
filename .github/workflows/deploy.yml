@@ -37,9 +37,6 @@ jobs:
             -backend-config="storage_account_name=terraform01manual" \
             -backend-config="container_name=tfstate" \
             -backend-config="key=terraform-infra.tfstate" \
-            -backend-config="tenant_id=${{ secrets.AZURE_TENANT_ID }}" \
-            -backend-config="client_id=${{ secrets.AZURE_CLIENT_ID }}" \
-            -backend-config="subscription_id=${{ secrets.AZURE_SUBSCRIPTION_ID }}"
         working-directory: ./terraform
 
       - name: Terraform Plan
