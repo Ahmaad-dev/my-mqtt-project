@@ -34,6 +34,12 @@ jobs:
         run: terraform init
         working-directory: ./terraform
 
+      - name: Terraform Plan
+        run: |
+          terraform plan -out=tfplan \
+            -var="access_token=${{ secrets.ACCESS_TOKEN }}"
+        working-directory: ./terraform
+
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -44,7 +50,5 @@ jobs:
         run: docker push ghcr.io/ahmaad-dev/my-mqtt-project:mqttclient-v1
 
       - name: Terraform Apply
-        run: |
-          terraform apply -auto-approve \
-            -var="access_token=${{ secrets.ACCESS_TOKEN }}"
-        working-directory: terraform/
+        run: terraform apply -auto-approve tfplan
+        working-directory: ./terraform

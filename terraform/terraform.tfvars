@@ -1,4 +1,4 @@
-resource_group_name = "fh-smdo"
+resource_group_name = "fh-smdo-project"
 container_env_name  = "mqtt-env"
 container_app_name  = "mqtt-client"
 broker_url          = "demo.thingsboard.io"
