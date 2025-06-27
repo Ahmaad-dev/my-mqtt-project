@@ -36,7 +36,6 @@ resource "azurerm_container_app" "app" {
   name                         = var.container_app_name
   container_app_environment_id = azurerm_container_app_environment.env.id
   resource_group_name         = azurerm_resource_group.main.name
-  location                    = var.location
   revision_mode               = "Single"
 
   template {
