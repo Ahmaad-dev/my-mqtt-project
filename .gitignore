@@ -1,0 +1,22 @@
+# Bytecode
+__pycache__/
+*.pyc
+
+# Terraform
+terraform/.terraform/
+terraform/terraform.tfstate*
+terraform/.terraform.lock.hcl
+
+# Private Dateien
+*.pem
+.env
+
+# VSCode/Editor
+.vscode/
+.idea/
+
+# Python venv (falls vorhanden)
+venv/
+
+# Docker
+*.tar
