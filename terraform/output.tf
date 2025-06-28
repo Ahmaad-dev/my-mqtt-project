@@ -1,3 +1,3 @@
-output "acr_login_server" {
-  value = azurerm_container_registry.acr.login_server
+output "mqtt_container_group_ip" {
+  value = azurerm_container_group.mqtt_client.ip_address
 }

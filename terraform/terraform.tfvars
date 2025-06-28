@@ -1,6 +1,5 @@
 resource_group_name = "fh-smdo-project"
-container_env_name  = "mqtt-env"
-container_app_name  = "mqtt-client"
-broker_url          = "demo.thingsboard.io"
 image_name          = "ghcr.io/ahmaad-dev/my-mqtt-project:mqttclient-v1"
+broker_url          = "demo.thingsboard.io"
 access_token        = "r4kj6nnxch43dc4b1amb"
+ca_file             = "ca-root.pem"
