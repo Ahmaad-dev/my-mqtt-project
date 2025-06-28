@@ -5,17 +5,48 @@ import os
 import random
 import math
 from datetime import datetime
+import logging
 
+# Logging-Konfiguration
+logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] %(levelname)s: %(message)s')
+
+# Umgebungsvariablen laden
 BROKER = os.getenv("BROKER", "iothub.magenta.at")
 PORT = 8883
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 CA_FILE = os.getenv("CA_FILE", "ca-root.pem")
 
+# MQTT-Client initialisieren
 client = mqtt.Client()
 client.username_pw_set(ACCESS_TOKEN)
 client.tls_set(ca_certs=CA_FILE)
 
-client.connect(BROKER, PORT, 60)
+# MQTT-Callbacks definieren
+def on_connect(client, userdata, flags, rc):
+    if rc == 0:
+        logging.info("MQTT Verbindung erfolgreich!")
+    else:
+        logging.warning(f"MQTT Verbindung fehlgeschlagen, Code: {rc}")
+
+def on_disconnect(client, userdata, rc):
+    logging.warning(f"MQTT Verbindung getrennt (rc={rc})")
+
+def on_publish(client, userdata, mid):
+    logging.debug(f"Nachricht veröffentlicht (mid={mid})")
+
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_publish = on_publish
+
+# Verbindungsversuch
+try:
+    logging.info(f"Zertifikat: {CA_FILE}")
+    logging.info(f"Broker: {BROKER}:{PORT}")
+    client.connect(BROKER, PORT, 60)
+except Exception as e:
+    logging.error(f"Verbindung fehlgeschlagen: {e}")
+    exit(1)
+
 client.loop_start()
 
 # ThingsBoard-typisches Topic
@@ -57,9 +88,9 @@ def ermittle_status(temp, vib, leist, rpm):
     else:
         return "betriebsbereit"
 
+# Hauptloop
 while True:
     now = time.time()
-
     payload = {}
 
     if now - last_sent["temperatur"] >= intervals["temperatur"]:
@@ -103,6 +134,6 @@ while True:
 
     if payload:
         client.publish(topic, json.dumps(payload), qos=1)
-        print(f"[{datetime.now()}] Gesendet: {payload}")
+        logging.info(f"Gesendet: {payload}")
 
     time.sleep(1)
