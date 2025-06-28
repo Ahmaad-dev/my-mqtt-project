@@ -6,13 +6,6 @@ import random
 import math
 from datetime import datetime
 import logging
-import socket
-
-try:
-    socket.create_connection(("demo.thingsboard.io", 8883), timeout=5)
-    print("Port 8883 ist erreichbar.")
-except Exception as e:
-    print("Port 8883 NICHT erreichbar:", e)
 
 # Logging-Konfiguration
 logging.basicConfig(level=logging.DEBUG, format='[%(asctime)s] %(levelname)s: %(message)s')

@@ -9,6 +9,16 @@ variable "resource_group_name" {
   description = "Name der Resource Group"
 }
 
+variable "container_env_name" {
+  type        = string
+  description = "Name der Container App Umgebung"
+}
+
+variable "container_app_name" {
+  type        = string
+  description = "Name der Container App"
+}
+
 variable "access_token" {
   type        = string
   description = "Zugangstoken für den MQTT Broker"
@@ -30,3 +40,4 @@ variable "ca_file" {
   default     = "ca-root.pem"
   description = "Pfad zur Root-CA-Datei"
 }
+
