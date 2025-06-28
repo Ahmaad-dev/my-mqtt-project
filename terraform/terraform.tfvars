@@ -1,5 +1,5 @@
 resource_group_name = "fh-smdo-project"
 image_name          = "ghcr.io/ahmaad-dev/my-mqtt-project:mqttclient-v1"
-broker_url          = "demo.thingsboard.io"
+broker_url          = "iothub.magenta.at"
 access_token        = "r4kj6nnxch43dc4b1amb"
 ca_file             = "ca-root.pem"
