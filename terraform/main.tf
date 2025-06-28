@@ -33,10 +33,10 @@ resource "azurerm_container_registry" "acr" {
 }
 
 resource "azurerm_container_app" "app" {
-  name                         = var.container_app_name
+  name                          = var.container_app_name
   container_app_environment_id = azurerm_container_app_environment.env.id
-  resource_group_name         = azurerm_resource_group.main.name
-  revision_mode               = "Single"
+  resource_group_name           = azurerm_resource_group.main.name
+  revision_mode                 = "Single"
 
   template {
     container {
@@ -44,7 +44,7 @@ resource "azurerm_container_app" "app" {
       image  = var.image_name
       cpu    = 0.5
       memory = "1.0Gi"
-      
+
       env {
         name  = "ACCESS_TOKEN"
         value = var.access_token
@@ -54,12 +54,15 @@ resource "azurerm_container_app" "app" {
         name  = "BROKER"
         value = var.broker_url
       }
-      
+
       env {
         name  = "CA_FILE"
         value = var.ca_file
       }
     }
+    
+    min_replicas = 1
+    max_replicas = 1
   }
 
   identity {
@@ -70,11 +73,12 @@ resource "azurerm_container_app" "app" {
     external_enabled = false
     target_port      = 80
     transport        = "auto"
-    
+
     traffic_weight {
-      percentage = 100
-      latest_revision = true
+      percentage       = 100
+      latest_revision  = true
     }
   }
 }
+
 
