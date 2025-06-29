@@ -68,17 +68,6 @@ resource "azurerm_container_app" "app" {
   identity {
     type = "SystemAssigned"
   }
-
-  ingress {
-    external_enabled = false
-    target_port      = 80
-    transport        = "auto"
-
-    traffic_weight {
-      percentage       = 100
-      latest_revision  = true
-    }
-  }
 }
 
 
